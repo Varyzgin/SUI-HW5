@@ -22,7 +22,7 @@ struct MainPageView: View {
             ZStack(alignment: .top) {
                 ScrollView {
                     VStack(spacing: 15) {
-                        HStack {}.frame(height: 40)
+                        HStack {}.frame(height: 60)
                         ForEach(posts, id: \.id) { post in
                             let postViewModel = PostViewModel(post: post)
                             PostView(path: $path, viewModel: postViewModel)
@@ -31,27 +31,48 @@ struct MainPageView: View {
                 }
                 .scrollIndicators(.visible)
                 .navigationDestination(for: Router.self) { page in
-                    SettingsPageView()
-//                    switch page {
-//                    case .detail:
-//                        SettingsPageView()
-//                    }
+                    switch page {
+                    case .details(let post):
+                        let viewModel = DetailsPageViewModel(post: post)
+                        DetailsPageView(viewModel: viewModel, path: $path)
+                    case .settings:
+                        SettingsPageView()
+                    }
                 }
                 
-                HStack {
-                    Text("InstaPocket")
-                        .lineLimit(1)
-                        .font(.largeTitle)
-                        .bold()
+                ZStack(alignment: .top) {
+                    Rectangle()
+                        .fill(.thinMaterial)
+                        .frame(height: 150)
+                        .mask(LinearGradient(
+                            gradient: Gradient(colors: [.black, .black, .black, .clear]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ))
+                        .ignoresSafeArea()
+                        .allowsHitTesting(false)
+                    
+                    
+                    HStack {
+                        Text("InstaPocket")
+                            .lineLimit(1)
+                            .font(.largeTitle)
+                            .bold()
+                            .foregroundStyle(.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Button {
+                            path.append(Router.settings)
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .imageScale(.large)
+                        }
                         .foregroundStyle(.primary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Image(systemName: "gearshape")
-                        .imageScale(.large)
-                        .foregroundStyle(.primary)
+                        
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 7)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 7)
-                .background(.ultraThickMaterial)
+                
             }
             .background(.ultraThickMaterial)
         }

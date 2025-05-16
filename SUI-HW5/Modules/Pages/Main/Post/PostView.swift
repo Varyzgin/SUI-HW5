@@ -18,7 +18,7 @@ struct PostView: View {
     
     var body: some View {
         Button {
-            path.append(Router.details)
+            path.append(Router.details(post: viewModel.post))
         } label: {
             ZStack {
                 Image(viewModel.post.imageResource)
@@ -32,14 +32,14 @@ struct PostView: View {
                     
                     HStack {
                         Text(
-                            viewModel.endingsRussification(number: viewModel.post.photoesCount, definition: (one: "Фотография", from2To4: "Фотографии", more: "Фотографий"))
+                            Russificator.endingsRussification(number: viewModel.post.photoesCount, definition: (one: "Фотография", from2To4: "Фотографии", more: "Фотографий"))
                         )
                         .lineLimit(1)
                         .foregroundStyle(.ultraThickMaterial)
                         .shadow(radius: 3)
                         Spacer()
                         Text(
-                            viewModel.endingsRussification(number: viewModel.post.commentsCount, definition: (one: "Коментарий", from2To4: "Коментария", more: "Коментариев"))
+                            Russificator.endingsRussification(number: viewModel.post.commentsCount, definition: (one: "Коментарий", from2To4: "Коментария", more: "Коментариев"))
                         )
                         .lineLimit(1)
                         .foregroundStyle(.ultraThickMaterial)
@@ -54,7 +54,6 @@ struct PostView: View {
                             ForEach(0..<viewModel.post.tags.count, id: \.self) { index in
                                 Text(viewModel.post.tags[index])
                                     .lineLimit(1)
-                                    .bold()
                                     .foregroundStyle(.ultraThickMaterial)
                                     .shadow(radius: 1)
                                     .padding(7)
@@ -68,12 +67,11 @@ struct PostView: View {
                     
                     Text(viewModel.post.text)
                         .lineLimit(3)
+                        .foregroundStyle(.ultraThickMaterial)
+                        .shadow(radius: 3)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                         .padding(.bottom)
-                        .foregroundStyle(.ultraThickMaterial)
-                        .shadow(radius: 3)
-
                 }
                 .padding(.horizontal)
             }

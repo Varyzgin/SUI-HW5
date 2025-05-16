@@ -7,6 +7,5 @@
 
 enum Router: Hashable {
     //    case main
-    //    case settings
-    case details
+    case settings, details(post: PostModel)
 }

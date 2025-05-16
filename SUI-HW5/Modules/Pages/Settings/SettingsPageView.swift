@@ -46,6 +46,16 @@ struct SettingsPageView: View {
             .padding(.horizontal)
 //            .scrollIndicators(.visible)
             //                .frame(maxHeight: .infinity)
+            Rectangle()
+                .fill(.thinMaterial)
+                .frame(height: 150)
+                .mask(LinearGradient(
+                    gradient: Gradient(colors: [.black, .black, .black, .clear]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                ))
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
             
             Text("Settings")
                 .lineLimit(1)
@@ -56,9 +66,9 @@ struct SettingsPageView: View {
         
                 .padding(.horizontal)
                 .padding(.bottom, 7)
-                .background(.ultraThickMaterial)
         }
         .background(.ultraThickMaterial)
+        .navigationBarHidden(true)
     }
 }
 
