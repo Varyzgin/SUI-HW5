@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PostModel: Identifiable {
+struct PostModel: Identifiable, Hashable {
     let id: String = UUID().uuidString
     let photoesCount: Int
     let commentsCount: Int

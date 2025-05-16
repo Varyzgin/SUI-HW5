@@ -9,54 +9,56 @@ import SwiftUI
 
 struct PostView: View {
     @Binding var path: NavigationPath
-    @StateObject var viewModel: PostViewModel
+    @ObservedObject var viewModel: PostViewModel
     
-    init(path: Binding<NavigationPath>, postModel: PostModel) {
+    init(path: Binding<NavigationPath>, viewModel: PostViewModel) {
         self._path = path
-        viewModel.model = postModel
+        self.viewModel = viewModel
     }
     
     var body: some View {
         Button {
             path.append(Router.details)
         } label: {
-            Image(viewModel.model.imageResource)
-                .resizable()
-                .scaledToFill()
-                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width - 30)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .overlay {
-                    VStack(alignment: .leading) {
-                        Spacer()
-                        
-                        HStack {
-                            Text(
-                                viewModel.Rus(number: viewModel.model.photoesCount, oneTwoMore: "Фотография", "Фотографии", "Фотографий")
-                            )
-                            .lineLimit(1)
-                            .foregroundStyle(.ultraThickMaterial)
-                            .shadow(radius: 3)
-                            Spacer()
-                            Text(
-                                viewModel.Rus(number: viewModel.model.commentsCount, oneTwoMore: "Коментарий", "Коментария", "Коментариев")
-                            )
-                            .lineLimit(1)
-                            .foregroundStyle(.ultraThickMaterial)
-                            .shadow(radius: 3)
-                        }
-                        .padding(.horizontal)
+            ZStack {
+                Image(viewModel.post.imageResource)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width - 30)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                
+                VStack {
+                    Spacer()
+                    
+                    HStack {
+                        Text(
+                            viewModel.endingsRussification(number: viewModel.post.photoesCount, definition: (one: "Фотография", from2To4: "Фотографии", more: "Фотографий"))
+                        )
+                        .lineLimit(1)
                         .foregroundStyle(.ultraThickMaterial)
+                        .shadow(radius: 3)
+                        Spacer()
+                        Text(
+                            viewModel.endingsRussification(number: viewModel.post.commentsCount, definition: (one: "Коментарий", from2To4: "Коментария", more: "Коментариев"))
+                        )
+                        .lineLimit(1)
+                        .foregroundStyle(.ultraThickMaterial)
+                        .shadow(radius: 3)
                     }
+                    .padding(.horizontal)
+                    .foregroundStyle(.ultraThickMaterial)
+                    
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            ForEach(0..<viewModel.model.tags.count, id: \.self) { index in
-                                Text(viewModel.model.tags[index])
+                            ForEach(0..<viewModel.post.tags.count, id: \.self) { index in
+                                Text(viewModel.post.tags[index])
                                     .lineLimit(1)
                                     .bold()
                                     .foregroundStyle(.ultraThickMaterial)
                                     .shadow(radius: 1)
                                     .padding(7)
+                                    .padding(.horizontal, 7)
                                     .background(.ultraThinMaterial)
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
                             }
@@ -64,15 +66,17 @@ struct PostView: View {
                         .padding(.horizontal)
                     }
                     
-                    Text(viewModel.model.text)
+                    Text(viewModel.post.text)
                         .lineLimit(3)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                         .padding(.bottom)
                         .foregroundStyle(.ultraThickMaterial)
                         .shadow(radius: 3)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+
                 }
-            
+                .padding(.horizontal)
+            }
         }
     }
 }

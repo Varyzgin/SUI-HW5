@@ -8,20 +8,19 @@
 import Foundation
 
 class PostViewModel: ObservableObject {
-    @Published var model: PostModel
-    
+    @Published var post: PostModel
     init(post: PostModel) {
-        self.model = post
+        self.post = post
     }
     
-    func Rus(number toDosCount: Int, oneTwoMore: String...) -> String {
-        if toDosCount % 10 == 1 && toDosCount % 100 != 11 {
-            return "\(toDosCount) \(oneTwoMore[0])"
-        } else if (toDosCount % 10 == 2 || toDosCount % 10 == 3 || toDosCount % 10 == 4)
-                    && toDosCount % 100 != 12 && toDosCount % 100 != 13 && toDosCount % 100 != 14 {
-            return "\(toDosCount) \(oneTwoMore[1])"
+    func endingsRussification(number: Int, definition: (one: String, from2To4: String, more: String)) -> String {
+        if number % 10 == 1 && number % 100 != 11 {
+            return "\(number) \(definition.one)"
+        } else if (number % 10 == 2 || number % 10 == 3 || number % 10 == 4)
+                    && number % 100 != 12 && number % 100 != 13 && number % 100 != 14 {
+            return "\(number) \(definition.from2To4)"
         } else {
-            return "\(toDosCount) \(oneTwoMore[2])"
+            return "\(number) \(definition.more)"
         }
     }
 }
